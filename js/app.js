@@ -63,6 +63,16 @@ projectInput.addEventListener("change", () => {
   projectNameEl.textContent = projectInput.value;
 });
 
+const projectSubmit = document.getElementById("projectSubmit");
+
+projectSubmit.addEventListener("click", () => {
+  const name = projectInput.value.trim();
+  if (name) {
+    setCurrentProject(name);
+    projectNameEl.textContent = name;
+  }
+});
+
 calculateBtn.addEventListener("click", () => {
   const inputs = document.querySelectorAll(".score");
   const scores = [...inputs].map((i) => Number(i.value) || 0);
