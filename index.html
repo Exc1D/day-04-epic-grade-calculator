@@ -3,29 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Grade Quest</title>
+    <title>100-Day Coding Journey</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="app">
       <h1 id="name">100-DAY CODING JOURNEY</h1>
 
-      <!-- DAY NUMBER -->
-
       <!-- RANK HEADER -->
-      <section class="rank-panel">
-        <img id="rankIcon" src="assets/ranks/bronze.svg" class="rank-icon" />
+      <header class="rank-panel">
+        <img id="rankIcon" />
         <div>
           <h2 id="rankLabel">BRONZE</h2>
           <div class="xp-container">
             <div id="xpBar" class="xp-bar"></div>
           </div>
-          <small>XP: <span id="xp">0</span></small>
+          <p>XP: <span id="xp">0</span></p>
         </div>
-      </section>
+      </header>
+
+      <!-- PROJECT -->
+      <input id="projectInput" placeholder="Project Name" />
+      <h2 id="projectName"></h2>
 
       <!-- INPUTS -->
-
       <section class="grades">
         <input type="number" class="score" placeholder="Correctness" />
         <input type="number" class="score" placeholder="Readability" />
@@ -42,8 +43,7 @@
 
       <!-- BADGES & STREAK -->
       <section class="meta">
-        <p>Streak: <span id="streak">0</span> day(s)</p>
-        <ul id="badges"></ul>
+        <p>Streak: <span id="streak"></span></p>
       </section>
     </main>
     <script src="index.js"></script>
