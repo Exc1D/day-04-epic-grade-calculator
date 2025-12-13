@@ -1,62 +1,58 @@
-const KEYS = {
-  XP: "xp",
-  WEEK: "week",
-  STREAK: "streak",
-  LAST_VISIT: "lastVisit",
-  PROJECT: "currentProject",
-  HISTORY: "history",
+// In-memory storage for Claude artifacts compatibility
+const storage = {
+  xp: 0,
+  week: 1,
+  streak: 0,
+  lastVisit: null,
+  project: "Untitled Project",
+  history: [],
 };
 
 export function getXP() {
-  return Number(localStorage.getItem(KEYS.XP)) || 0;
+  return storage.xp;
 }
 
 export function setXP(xp) {
-  localStorage.setItem(KEYS.XP, xp);
+  storage.xp = Math.max(0, Number(xp) || 0);
 }
 
 export function getWeek() {
-  return Number(localStorage.getItem(KEYS.WEEK)) || 1;
+  return storage.week;
 }
 
 export function setWeek(week) {
-  localStorage.setItem(KEYS.WEEK, week);
+  storage.week = Math.max(1, Number(week) || 1);
 }
 
 export function getStreak() {
-  return Number(localStorage.getItem(KEYS.STREAK)) || 0;
+  return storage.streak;
 }
 
 export function setStreak(value) {
-  localStorage.setItem(KEYS.STREAK, value);
+  storage.streak = Math.max(0, Number(value) || 0);
 }
 
 export function getLastVisit() {
-  return localStorage.getItem(KEYS.LAST_VISIT);
+  return storage.lastVisit;
 }
 
 export function setLastVisit(date) {
-  localStorage.setItem(KEYS.LAST_VISIT, date);
+  storage.lastVisit = date;
 }
 
 export function getCurrentProject() {
-  return localStorage.getItem(KEYS.PROJECT) || "Untitled Project";
+  return storage.project || "Untitled Project";
 }
 
 export function setCurrentProject(name) {
-  localStorage.setItem(KEYS.PROJECT, name);
+  const trimmed = String(name || "").trim();
+  storage.project = trimmed || "Untitled Project";
 }
 
 export function getHistory() {
-  const data = localStorage.getItem(KEYS.HISTORY);
-  if (!data) return [];
-  try {
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
+  return Array.isArray(storage.history) ? storage.history : [];
 }
 
 export function saveHistory(history) {
-  localStorage.setItem(KEYS.HISTORY, JSON.stringify(history));
+  storage.history = Array.isArray(history) ? history : [];
 }
