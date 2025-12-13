@@ -1,3 +1,9 @@
+const xpSound = new Audio("assets/audio/xp.mp3");
+const rankUpSound = new Audio("assets/audio/rankup.mp3");
+
+xpSound.volume = 0.4;
+rankUpSound.volume = 0.6;
+
 import { getWeekNumber, todayString } from "./utils.js";
 import {
   getXP,
@@ -90,7 +96,23 @@ calculateBtn.addEventListener("click", () => {
       ${avg >= 60 ? "PASS" : "FAIL"}
     </p>
   `;
+  if (gainedXP > 0) {
+    xpSound.currentTime = 0;
+    xpSound.play();
+  }
 });
+
+const oldRank = getRankFromXP(xp - gainedXP);
+const newRank = getRankFromXP(xp);
+if (oldRank !== newRank) {
+  rankUpSound.currentTime = 0;
+  rankUpSound.play();
+
+  rankIcon.classList.add("rank-up");
+  setTimeout(() => {
+    rankIcon.classList.remove("rank-up");
+  }, 600);
+}
 
 // UI UPDATE
 function updateRankUI() {

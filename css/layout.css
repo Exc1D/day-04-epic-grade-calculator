@@ -11,17 +11,29 @@ header {
 main {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
+}
+
+.rank-panel {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: var(--panel);
+  padding: 1rem;
+  border-radius: 1rem;
 }
 
 .grades {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
 }
 
-@media (min-width: 640px) {
-  .grades {
-    grid-template-columns: repeat(5, 1fr);
+@media (min-width: 768px) {
+  body {
+    max-width: 720px;
+    margin: auto;
   }
 }
