@@ -18,3 +18,9 @@ const ranks = [
 function getRank(xp) {
   return [...ranks].reverse().find((r) => xp >= r.xp).name;
 }
+
+function updateXPBar(xp) {
+  const tierXP = 100;
+  const percent = ((xp % tierXP) / tierXP) * 100;
+  document.getElementById("xpBar").style.width = `${percent}%`;
+}
