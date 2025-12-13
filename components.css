@@ -1,0 +1,38 @@
+input {
+  padding: 0.6rem;
+  border-radius: var(--radius);
+  border: none;
+  background: #1f2933;
+  color: var(--text);
+  text-align: center;
+}
+
+button {
+  padding: 0.8rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.card {
+  background: var(--panel);
+  padding: 1rem;
+  border-radius: var(--radius);
+}
+
+.pass {
+  color: var(--pass);
+  font-weight: bold;
+}
+
+.fail {
+  color: var(--fail);
+  font-weight: bold;
+}
