@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grade Quest</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="'app">
+      <!-- RANK HEADER -->
+      <section class="rank-panel">
+        <img id="rankIcon" src="assets/ranks/bronze.svg" class="rank-icon" />
+        <div>
+          <h2 id="rankLabel">BRONZE</h2>
+          <div class="xp-container">
+            <div id="xpBar" class="xp-bar"></div>
+          </div>
+          <small>XP: <span id="xp">0</span></small>
+        </div>
+      </section>
+
+      <!-- INPUTS -->
+
+      <section class="grades">
+        <input type="number" class="score" placeholder="Correctness" />
+        <input type="number" class="score" placeholder="Readability" />
+        <input type="number" class="score" placeholder="Simplicity " />
+        <input type="number" class="score" placeholder="Efficiency" />
+        <input type="number" class="score" placeholder="Best Practices" />
+        <input type="number" class="score" placeholder="Creativity" />
+      </section>
+
+      <button id="calculate">CALCULATE</button>
+
+      <!-- RESULT -->
+      <section id="results"></section>
+
+      <!-- BADGES & STREAK -->
+      <section class="meta">
+        <p>Streak: <span id="streak">0</span>days</p>
+        <ul id="badges"></ul>
+      </section>
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>
