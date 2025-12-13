@@ -25,6 +25,11 @@ main {
   border-radius: 1rem;
 }
 
+.rank-icon {
+  width: clamp(80px, 20vw, 120px);
+  height: auto;
+}
+
 .grades {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
