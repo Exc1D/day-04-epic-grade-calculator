@@ -28,6 +28,11 @@ main {
 h1 {
   text-align: center;
   margin: 0 auto;
+  font-family: "Cinzel", serif;
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 8px rgba(245, 197, 66, 0.4);
 }
 
 .rank-panel {
