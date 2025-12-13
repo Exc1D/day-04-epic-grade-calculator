@@ -26,10 +26,12 @@ function updateXPBar(xp) {
   document.getElementById("xpBar").style.width = `${percent}%`;
 }
 
-//DAILY STREAK
+// DAILY STREAK
 const today = new Date().toDateString();
 if (today !== lastVisit) {
   streak++;
   localStorage.setItem("streak", streak);
   localStorage.setItem("lastVisit", today);
 }
+
+// CALCULATE

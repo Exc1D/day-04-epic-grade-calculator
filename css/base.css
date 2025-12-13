@@ -1,0 +1,38 @@
+/* base.css */
+
+:root {
+  --bg: #0b0f1a;
+  --panel: #12182b;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+
+  --accent: #3b82f6;
+  --pass: #22c55e;
+  --fail: #ef4444;
+
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  padding: 1rem;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input {
+  font-family: inherit;
+}
