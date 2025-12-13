@@ -1,9 +1,3 @@
-const xpSound = new Audio("assets/audio/xp.mp3");
-const rankUpSound = new Audio("assets/audio/rankup.mp3");
-
-xpSound.volume = 0.4;
-rankUpSound.volume = 0.6;
-
 import { getWeekNumber, todayString } from "./utils.js";
 import {
   getXP,
@@ -19,116 +13,215 @@ import {
   getHistory,
   saveHistory,
 } from "./storage.js";
-import { getRankFromXP, getXPPercent } from "./rank.js";
+import { getRankFromXP, getXPPercent, getLetterGrade } from "./rank.js";
 
-// DOM
-const rankIcon = document.getElementById("rankIcon");
-const rankLabel = document.getElementById("rankLabel");
-const xpValue = document.getElementById("xp");
-const xpBar = document.getElementById("xpBar");
-const projectNameEl = document.getElementById("projectName");
-const projectInput = document.getElementById("projectInput");
-const streakEl = document.getElementById("streak");
-const calculateBtn = document.getElementById("calculate");
-const results = document.getElementById("results");
+// Audio setup
+const sounds = {
+  xp: createAudio("assets/audio/xp.mp3", 0.4),
+  rankUp: createAudio("assets/audio/rankup.mp3", 0.6),
+};
 
-// INIT
+function createAudio(src, volume) {
+  const audio = new Audio(src);
+  audio.volume = volume;
+  audio.preload = "auto";
+  return audio;
+}
+
+function playSound(audio) {
+  audio.currentTime = 0;
+  audio.play().catch((err) => console.log("Audio playback prevented:", err));
+}
+
+// Cache DOM elements
+const dom = {
+  rankIcon: document.getElementById("rankIcon"),
+  rankLabel: document.getElementById("rankLabel"),
+  xpValue: document.getElementById("xp"),
+  xpBar: document.getElementById("xpBar"),
+  projectNameEl: document.getElementById("projectName"),
+  projectInput: document.getElementById("projectInput"),
+  streakEl: document.getElementById("streak"),
+  calculateBtn: document.getElementById("calculate"),
+  results: document.getElementById("results"),
+  projectForm: document.querySelector(".project-form"),
+  gradesForm: document.querySelector(".grades-form"),
+};
+
+// State
 let xp = getXP();
 let history = getHistory();
 const currentWeek = getWeekNumber();
 
-// WEEK RESET
-if (getWeek() !== currentWeek) {
-  setWeek(currentWeek);
-  setXP(0);
-  xp = 0;
+// Initialize
+function init() {
+  handleWeekReset();
+  handleStreakUpdate();
+  initializeUI();
+  attachEventListeners();
 }
 
-// STREAK
-const today = todayString();
-if (getLastVisit() !== today) {
-  setStreak(getStreak() + 1);
-  setLastVisit(today);
-}
-
-// UI INIT
-if (projectNameEl) projectNameEl.textContent = getCurrentProject();
-if (projectInput) projectInput.value = getCurrentProject();
-if (streakEl) streakEl.textContent = getStreak();
-updateRankUI();
-
-// EVENTS
-const projectForm = document.querySelector(".project-form");
-const gradesForm = document.querySelector(".grades-form");
-
-projectForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const name = projectInput.value.trim();
-  if (name) {
-    setCurrentProject(name);
-    projectNameEl.textContent = name;
-    projectInput.value = "";
+function handleWeekReset() {
+  if (getWeek() !== currentWeek) {
+    setWeek(currentWeek);
+    setXP(0);
+    xp = 0;
   }
-});
+}
 
-gradesForm.addEventListener("submit", (e) => {
+function handleStreakUpdate() {
+  const today = todayString();
+  const lastVisit = getLastVisit();
+
+  if (lastVisit !== today) {
+    setStreak(getStreak() + 1);
+    setLastVisit(today);
+  }
+}
+
+function initializeUI() {
+  const currentProject = getCurrentProject();
+
+  if (dom.projectNameEl) dom.projectNameEl.textContent = currentProject;
+  if (dom.projectInput) dom.projectInput.value = currentProject;
+  if (dom.streakEl) dom.streakEl.textContent = getStreak();
+
+  updateRankUI();
+}
+
+function attachEventListeners() {
+  if (dom.projectForm) {
+    dom.projectForm.addEventListener("submit", handleProjectSubmit);
+  }
+
+  if (dom.gradesForm) {
+    dom.gradesForm.addEventListener("submit", handleGradesSubmit);
+  }
+
+  if (dom.calculateBtn) {
+    dom.calculateBtn.addEventListener("click", handleCalculate);
+  }
+}
+
+function handleProjectSubmit(e) {
   e.preventDefault();
-  calculateBtn.click();
-});
 
-calculateBtn.addEventListener("click", () => {
+  const name = dom.projectInput?.value.trim();
+  if (!name) return;
+
+  setCurrentProject(name);
+  if (dom.projectNameEl) dom.projectNameEl.textContent = name;
+  if (dom.projectInput) dom.projectInput.value = "";
+}
+
+function handleGradesSubmit(e) {
+  e.preventDefault();
+  dom.calculateBtn?.click();
+}
+
+function handleCalculate() {
   const inputs = document.querySelectorAll(".score");
-  const scores = [...inputs].map((i) => Math.max(0, Math.min(100, Number(i.value) || 0)));
+  const scores = getValidScores(inputs);
+
+  if (scores.length === 0) {
+    showResults(0, false);
+    return;
+  }
 
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   const passed = scores.filter((s) => s >= 60).length;
+  const gainedXP = passed * 20;
 
   const oldRank = getRankFromXP(xp);
-  const gainedXP = passed * 20;
   xp += gainedXP;
   setXP(xp);
 
   const newRank = getRankFromXP(xp);
 
-  history.push({
-    project: getCurrentProject(),
-    average: avg,
-    letter: avg >= 90 ? "A" : avg >= 80 ? "B" : avg >= 70 ? "C" : "D",
-    rank: newRank,
-    xp,
-    week: currentWeek,
-    date: today,
-  });
-
-  saveHistory(history);
+  saveToHistory(avg, newRank);
   updateRankUI();
+  showResults(avg, avg >= 60);
 
-  results.innerHTML = `
-    <p>Average: ${avg.toFixed(1)}</p>
-    <p class="${avg >= 60 ? "pass" : "fail"}">
-      ${avg >= 60 ? "PASS" : "FAIL"}
-    </p>
-  `;
-  
   if (gainedXP > 0) {
-    xpSound.currentTime = 0;
-    xpSound.play().catch(() => {});
-    inputs.forEach((input) => input.value = "");
+    playSound(sounds.xp);
+    clearInputs(inputs);
   }
 
   if (oldRank !== newRank) {
-    rankUpSound.currentTime = 0;
-    rankUpSound.play().catch(() => {});
-    rankIcon.classList.add("rank-up");
-    setTimeout(() => rankIcon.classList.remove("rank-up"), 600);
+    playSound(sounds.rankUp);
+    animateRankUp();
   }
-});
+}
 
-// UI UPDATE
+function getValidScores(inputs) {
+  return [...inputs]
+    .map((input) => {
+      const value = Number(input.value);
+      return isNaN(value) ? 0 : Math.max(0, Math.min(100, value));
+    })
+    .filter((score) => score > 0);
+}
+
+function saveToHistory(avg, rank) {
+  history.push({
+    project: getCurrentProject(),
+    average: avg,
+    letter: getLetterGrade(avg),
+    rank: rank,
+    xp: xp,
+    week: currentWeek,
+    date: todayString(),
+  });
+
+  saveHistory(history);
+}
+
+function showResults(avg, passed) {
+  if (!dom.results) return;
+
+  dom.results.innerHTML = `
+    <p><strong>Average:</strong> ${avg.toFixed(1)}</p>
+    <p class="${passed ? "pass" : "fail"}">
+      ${passed ? "PASS ✓" : "FAIL ✗"}
+    </p>
+  `;
+}
+
+function clearInputs(inputs) {
+  inputs.forEach((input) => (input.value = ""));
+}
+
+function animateRankUp() {
+  if (!dom.rankIcon) return;
+
+  dom.rankIcon.classList.add("rank-up");
+  setTimeout(() => dom.rankIcon.classList.remove("rank-up"), 600);
+}
+
 function updateRankUI() {
   const rank = getRankFromXP(xp);
-  if (rankIcon) rankIcon.src = `assets/ranks/${rank}.svg`;
-  if (rankLabel) rankLabel.textContent = rank.toUpperCase();
-  if (xpValue) xpValue.textContent = xp;
-  if (xpBar) xpBar.style.width = `${getXPPercent(xp)}%`;
+
+  if (dom.rankIcon) {
+    dom.rankIcon.src = `assets/ranks/${rank}.svg`;
+    dom.rankIcon.alt = `${rank} rank`;
+    dom.rankIcon.onerror = () => {
+      dom.rankIcon.src = "assets/ranks/bronze.svg";
+      dom.rankIcon.alt = "bronze rank";
+    };
+  }
+
+  if (dom.rankLabel) {
+    dom.rankLabel.textContent = rank.toUpperCase();
+  }
+
+  if (dom.xpValue) {
+    dom.xpValue.textContent = xp;
+  }
+
+  if (dom.xpBar) {
+    dom.xpBar.style.width = `${getXPPercent(xp)}%`;
+  }
 }
+
+// Start the app
+init();
