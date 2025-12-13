@@ -19,8 +19,17 @@ function getRank(xp) {
   return [...ranks].reverse().find((r) => xp >= r.xp).name;
 }
 
+// XP BAR UPDATE
 function updateXPBar(xp) {
   const tierXP = 100;
   const percent = ((xp % tierXP) / tierXP) * 100;
   document.getElementById("xpBar").style.width = `${percent}%`;
+}
+
+//DAILY STREAK
+const today = new Date().toDateString();
+if (today !== lastVisit) {
+  streak++;
+  localStorage.setItem("streak", streak);
+  localStorage.setItem("lastVisit", today);
 }
