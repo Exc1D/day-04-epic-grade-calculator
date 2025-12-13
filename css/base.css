@@ -1,35 +1,29 @@
-/* base.css */
-
 :root {
-  --bg: #0b0f1a;
-  --panel: #12182b;
-  --text: #e5e7eb;
-  --muted: #9ca3af;
+  --bg: #0b1220;
+  --panel: #121a2f;
+  --text: #e6e9f0;
+  --muted: #9aa4bf;
 
-  --accent: #3b82f6;
-  --pass: #22c55e;
-  --fail: #ef4444;
+  --bronze: #cd7f32;
+  --silver: #cfd9df;
+  --gold: #f5c542;
+  --epic: #a855f7;
+  --legend: #f97316;
+  --mythic: #ef4444;
 
-  --radius: 12px;
+  --xp: #22c55e;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
-  line-height: 1.5;
+  font-family: system-ui, sans-serif;
   padding: 1rem;
-}
-
-img {
-  max-width: 100%;
-  display: block;
 }
 
 button,
