@@ -180,7 +180,21 @@ function saveToHistory(avg, rank) {
 function showResults(avg, passed, rankedUp = false) {
   if (!dom.results) return;
 
-  const statusHTML = rankedUp ? "<p>🎉 RANK UP!</p>" : `<p class="${passed ? "pass" : "fail"}">${passed ? "PASS ✓" : "FAIL ✗"}</p>`;
+  let statusHTML;
+  if (rankedUp) {
+    const newRank = getRankFromXP(xp);
+    statusHTML = `
+      <div class="rank-up-badge">
+        <div class="rank-up-glow"></div>
+        <p class="rank-up-text">🎉 RANK UP! 🎉</p>
+        <p class="new-rank">${newRank.toUpperCase()}</p>
+      </div>
+    `;
+  } else {
+    statusHTML = `<p class="${passed ? "pass" : "fail"}">${
+      passed ? "PASS ✓" : "FAIL ✗"
+    }</p>`;
+  }
 
   dom.results.innerHTML = `
     <p><strong>Average:</strong> ${avg.toFixed(1)}</p>
@@ -220,7 +234,10 @@ function updateRankUI() {
   }
 
   if (dom.xpBar) {
-    dom.xpBar.style.width = `${getXPPercent(xp)}%`;
+    const xpPercent = getXPPercent(xp);
+    dom.xpBar.style.width = `${xpPercent}%`;
+    // Animate the XP bar fill
+    dom.xpBar.style.transition = "width 0.5s ease-out";
   }
 }
 
