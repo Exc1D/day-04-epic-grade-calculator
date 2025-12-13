@@ -137,17 +137,18 @@ function handleCalculate() {
   setXP(xp);
 
   const newRank = getRankFromXP(xp);
+  const rankedUp = oldRank !== newRank;
 
   saveToHistory(avg, newRank);
   updateRankUI();
-  showResults(avg, avg >= 60);
+  showResults(avg, avg >= 60, rankedUp);
 
   if (gainedXP > 0) {
     playSound(sounds.xp);
     clearInputs(inputs);
   }
 
-  if (oldRank !== newRank) {
+  if (rankedUp) {
     playSound(sounds.rankUp);
     animateRankUp();
   }
@@ -176,14 +177,14 @@ function saveToHistory(avg, rank) {
   saveHistory(history);
 }
 
-function showResults(avg, passed) {
+function showResults(avg, passed, rankedUp = false) {
   if (!dom.results) return;
+
+  const statusHTML = rankedUp ? "<p>🎉 RANK UP!</p>" : `<p class="${passed ? "pass" : "fail"}">${passed ? "PASS ✓" : "FAIL ✗"}</p>`;
 
   dom.results.innerHTML = `
     <p><strong>Average:</strong> ${avg.toFixed(1)}</p>
-    <p class="${passed ? "pass" : "fail"}">
-      ${passed ? "PASS ✓" : "FAIL ✗"}
-    </p>
+    ${statusHTML}
   `;
 }
 
