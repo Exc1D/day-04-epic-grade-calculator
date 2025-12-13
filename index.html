@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>100-Day Coding Journey</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <main class="app">
@@ -14,10 +14,14 @@
       </nav>
 
       <header class="rank-panel">
-        <img id="rankIcon" class="rank-icon" alt="Current rank">
+        <img id="rankIcon" class="rank-icon" alt="Current rank" />
         <div>
           <h2 id="rankLabel">BRONZE</h2>
-          <div class="xp-container" role="progressbar" aria-label="Experience points">
+          <div
+            class="xp-container"
+            role="progressbar"
+            aria-label="Experience points"
+          >
             <div id="xpBar" class="xp-bar"></div>
           </div>
           <p>XP: <span id="xp">0</span></p>
@@ -25,7 +29,7 @@
       </header>
 
       <form class="project-form">
-        <input id="projectInput" placeholder="Project name" required>
+        <input id="projectInput" placeholder="Project name" required />
         <button type="submit" id="projectSubmit">Submit</button>
       </form>
       <h2 id="projectName"></h2>
@@ -33,12 +37,48 @@
       <form class="grades-form">
         <fieldset class="grades">
           <legend class="sr-only">Grade Inputs</legend>
-          <input type="number" class="score" placeholder="Correctness" min="0" max="100">
-          <input type="number" class="score" placeholder="Readability" min="0" max="100">
-          <input type="number" class="score" placeholder="Simplicity" min="0" max="100">
-          <input type="number" class="score" placeholder="Efficiency" min="0" max="100">
-          <input type="number" class="score" placeholder="Best Practices" min="0" max="100">
-          <input type="number" class="score" placeholder="Creativity" min="0" max="100">
+          <input
+            type="number"
+            class="score"
+            placeholder="Correctness"
+            min="0"
+            max="100"
+          />
+          <input
+            type="number"
+            class="score"
+            placeholder="Readability"
+            min="0"
+            max="100"
+          />
+          <input
+            type="number"
+            class="score"
+            placeholder="Simplicity"
+            min="0"
+            max="100"
+          />
+          <input
+            type="number"
+            class="score"
+            placeholder="Efficiency"
+            min="0"
+            max="100"
+          />
+          <input
+            type="number"
+            class="score"
+            placeholder="Best Practices"
+            min="0"
+            max="100"
+          />
+          <input
+            type="number"
+            class="score"
+            placeholder="Creativity"
+            min="0"
+            max="100"
+          />
         </fieldset>
         <button type="submit" id="calculate">CALCULATE</button>
       </form>

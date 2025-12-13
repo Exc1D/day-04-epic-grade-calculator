@@ -1,3 +1,11 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
 header {
   display: flex;
   gap: 1rem;
@@ -14,6 +22,8 @@ main {
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  width: 100%;
+  max-width: 600px;
 }
 h1 {
   text-align: center;
@@ -27,6 +37,7 @@ h1 {
   background: var(--panel);
   padding: 1rem;
   border-radius: 1rem;
+  width: 100%;
 }
 
 .rank-icon {
@@ -39,7 +50,6 @@ h1 {
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
   width: 100%;
-  max-width: 600px;
 }
 
 @media (min-width: 480px) {
@@ -52,6 +62,16 @@ h1 {
   .grades {
     grid-template-columns: repeat(6, 1fr);
   }
+}
+
+nav,
+.project-form,
+.grades-form,
+button,
+#results,
+.meta {
+  width: 100%;
+  text-align: center;
 }
 
 @media (min-width: 768px) {
