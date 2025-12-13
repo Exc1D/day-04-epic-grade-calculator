@@ -71,6 +71,7 @@ projectSubmit.addEventListener("click", () => {
     setCurrentProject(name);
     projectNameEl.textContent = name;
   }
+  projectInput.value = "";
 });
 
 calculateBtn.addEventListener("click", () => {
@@ -109,6 +110,10 @@ calculateBtn.addEventListener("click", () => {
   if (gainedXP > 0) {
     xpSound.currentTime = 0;
     xpSound.play();
+
+    inputs.forEach((input) => {
+      input.value = "";
+    });
   }
 });
 
