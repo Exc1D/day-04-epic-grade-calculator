@@ -8,10 +8,16 @@ export const RANKS = [
 ];
 
 export function getRankFromXP(xp) {
-  return [...RANKS].reverse().find((rank) => xp >= rank.xp).name;
+  const rank = [...RANKS].reverse().find((rank) => xp >= rank.xp);
+  return rank?.name || "bronze";
 }
 
 export function getXPPercent(xp) {
-  const tierSize = 100;
-  return ((xp % tierSize) / tierSize) * 100;
+  const currentRank = [...RANKS].reverse().find((rank) => xp >= rank.xp);
+  const currentIndex = RANKS.findIndex(r => r.name === currentRank?.name);
+  const nextRank = RANKS[currentIndex + 1];
+  if (!nextRank) return 100;
+  const progress = xp - currentRank.xp;
+  const tierSize = nextRank.xp - currentRank.xp;
+  return Math.min(100, (progress / tierSize) * 100);
 }

@@ -16,7 +16,7 @@ export function setXP(xp) {
 }
 
 export function getWeek() {
-  return Number(localStorage.getItem(KEYS.WEEK));
+  return Number(localStorage.getItem(KEYS.WEEK)) || 1;
 }
 
 export function setWeek(week) {
@@ -48,7 +48,13 @@ export function setCurrentProject(name) {
 }
 
 export function getHistory() {
-  return JSON.parse(localStorage.getItem(KEYS.HISTORY)) || [];
+  const data = localStorage.getItem(KEYS.HISTORY);
+  if (!data) return [];
+  try {
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
 }
 
 export function saveHistory(history) {

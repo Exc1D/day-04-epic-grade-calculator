@@ -22,36 +22,4 @@
   }
 }
 
-/* floating label effect */
-.input-group {
-  position: relative;
-  width: 75%;
-}
 
-.input-group input {
-  width: 100%;
-  padding: 1rem 0.5rem 0.5rem;
-  font-size: var(--font-s);
-  border: 1px solid var(--text-color);
-  border-radius: 0.5rem;
-  background: var(--secondary-color);
-}
-
-.input-group label {
-  position: absolute;
-  top: 50%;
-  left: 0.75rem;
-  transform: translateY(-50%);
-  color: #777;
-  pointer-events: none;
-  transition: 0.25s ease;
-  background: var(--secondary-color);
-  padding: 0 0.25rem;
-}
-
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label {
-  top: 0;
-  transform: translateY(-50%) scale(0.85);
-  color: var(--accent-color);
-}

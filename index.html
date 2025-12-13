@@ -1,57 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>100-Day Coding Journey</title>
-
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <main class="app">
-      <h1 id="name">100-DAY CODING JOURNEY</h1>
-      <nav class="main-nav">
+      <h1>100-DAY CODING JOURNEY</h1>
+      <nav>
         <a href="history.html">View Stats</a>
       </nav>
 
-      <!-- RANK HEADER -->
       <header class="rank-panel">
-        <img id="rankIcon" class="rank-icon" />
+        <img id="rankIcon" class="rank-icon" alt="Current rank">
         <div>
           <h2 id="rankLabel">BRONZE</h2>
-          <div class="xp-container">
+          <div class="xp-container" role="progressbar" aria-label="Experience points">
             <div id="xpBar" class="xp-bar"></div>
           </div>
           <p>XP: <span id="xp">0</span></p>
         </div>
       </header>
 
-      <!-- PROJECT -->
-      <div class="project-input-group">
-        <input id="projectInput" placeholder="Project name" />
-        <button id="projectSubmit">Submit</button>
-      </div>
+      <form class="project-form">
+        <input id="projectInput" placeholder="Project name" required>
+        <button type="submit" id="projectSubmit">Submit</button>
+      </form>
       <h2 id="projectName"></h2>
 
-      <!-- INPUTS -->
-      <section class="grades">
-        <input type="number" class="score" placeholder="Correctness" />
-        <input type="number" class="score" placeholder="Readability" />
-        <input type="number" class="score" placeholder="Simplicity " />
-        <input type="number" class="score" placeholder="Efficiency" />
-        <input type="number" class="score" placeholder="Best Practices" />
-        <input type="number" class="score" placeholder="Creativity" />
-      </section>
+      <form class="grades-form">
+        <fieldset class="grades">
+          <legend class="sr-only">Grade Inputs</legend>
+          <input type="number" class="score" placeholder="Correctness" min="0" max="100">
+          <input type="number" class="score" placeholder="Readability" min="0" max="100">
+          <input type="number" class="score" placeholder="Simplicity" min="0" max="100">
+          <input type="number" class="score" placeholder="Efficiency" min="0" max="100">
+          <input type="number" class="score" placeholder="Best Practices" min="0" max="100">
+          <input type="number" class="score" placeholder="Creativity" min="0" max="100">
+        </fieldset>
+        <button type="submit" id="calculate">CALCULATE</button>
+      </form>
 
-      <button id="calculate">CALCULATE</button>
+      <section id="results" aria-live="polite"></section>
 
-      <!-- RESULT -->
-      <section id="results"></section>
-
-      <!-- BADGES & STREAK -->
-      <section class="meta">
-        <p>Streak: <span id="streak"></span></p>
-      </section>
+      <aside class="meta">
+        <p>Streak: <span id="streak">0</span></p>
+      </aside>
     </main>
     <script type="module" src="js/app.js"></script>
   </body>
