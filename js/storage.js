@@ -9,11 +9,12 @@ const storage = {
 };
 
 export function getXP() {
-  return storage.xp;
+  return Number(localStorage.getItem("100day_xp")) || 0;
 }
 
 export function setXP(xp) {
-  storage.xp = Math.max(0, Number(xp) || 0);
+  const normalized = Math.max(0, Number(xp) || 0);
+  localStorage.setItem("100day_xp", normalized);
 }
 
 export function getWeek() {
