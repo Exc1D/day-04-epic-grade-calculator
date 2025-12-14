@@ -1,5 +1,5 @@
-// Storage keys (prefixed to avoid conflicts)
-const keys = {
+// Storage KEYS (prefixed to avoid conflicts)
+const KEYS = {
   XP: "100day_XP",
   week: "100day_week",
   streak: "100day_streak",
@@ -9,7 +9,7 @@ const keys = {
 };
 
 export function getXP() {
-  const stored = localStorage.getItem(keys.XP);
+  const stored = localStorage.getItem(KEYS.XP);
   return stored ? Math.max(0, Number(stored) || 0) : 0;
 }
 
@@ -19,7 +19,7 @@ export function setXP(xp) {
 }
 
 export function getWeek() {
-  const stored = localStorage.getItem(keys.week);
+  const stored = localStorage.getItem(KEYS.week);
   return stored ? Math.max(1, Number(stored) || 1) : 1;
 }
 
@@ -29,24 +29,25 @@ export function setWeek(week) {
 }
 
 export function getStreak() {
-  const stored = localStorage.getItem(keys.streak);
+  const stored = localStorage.getItem(KEYS.streak);
   return stored ? Math.max(0, Number(stored) || 0) : 0;
 }
 
 export function setStreak(value) {
-  const normalized = Math.max(1, Number(value) || 1);
+  const normalized = Math.max(0, Number(value) || 0);
   localStorage.setItem(KEYS.streak, normalized);
 }
 
 export function getLastVisit() {
-  return localStorage.getItem(keys.lastVisit) || null;
+  return localStorage.getItem(KEYS.lastVisit) || null;
 }
 
 export function setLastVisit(date) {
   localStorage.setItem(KEYS.lastVisit, date);
 }
 export function getCurrentProject() {
-  return (stored = localStorage.getItem(keys.project) || "Untitled Project");
+  const stored = localStorage.getItem(KEYS.project);
+  return stored || "Untitled Project";
 }
 
 export function setCurrentProject(name) {
@@ -58,7 +59,7 @@ export function setCurrentProject(name) {
 // History management
 export function getHistory() {
   try {
-    const stored = localStorage.getItem(keys.history);
+    const stored = localStorage.getItem(KEYS.history);
     if (!stored) return [];
 
     const parsed = JSON.parse(stored);
@@ -72,7 +73,7 @@ export function getHistory() {
 export function saveHistory(history) {
   try {
     const data = Array.isArray(history) ? history : [];
-    localStorage.setItem(keys.history, JSON.stringify(data));
+    localStorage.setItem(KEYS.history, JSON.stringify(data));
   } catch (error) {
     console.error("Error saving history:", error);
   }
@@ -80,7 +81,7 @@ export function saveHistory(history) {
 
 // Utility: Clear all data (useful for testing)
 export function clearData() {
-  Object.values(keys).forEach((key) => {
+  Object.values(KEYS).forEach((key) => {
     localStorage.removeItem(key);
   });
 }
@@ -102,7 +103,7 @@ export function exportData() {
 export function importData(data) {
   try {
     if (data.xp !== undefined) setXP(data.xp);
-    if (data.week !== undefined) setWeek(data.weekl);
+    if (data.week !== undefined) setWeek(data.week);
     if (data.streak !== undefined) setStreak(data.streak);
     if (data.lastVisit) setLastVisit(data.lastVisit);
     if (data.project) setCurrentProject(data.project);
