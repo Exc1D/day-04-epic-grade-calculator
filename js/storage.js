@@ -97,3 +97,19 @@ export function exportData() {
     exportDate: new Date().toISOString(),
   };
 }
+
+// Utility: Import data from backup
+export function importData(data) {
+  try {
+    if (data.xp !== undefined) setXP(data.xp);
+    if (data.week !== undefined) setWeek(data.weekl);
+    if (data.streak !== undefined) setStreak(data.streak);
+    if (data.lastVisit) setLastVisit(data.lastVisit);
+    if (data.project) setCurrentProject(data.project);
+    if (data.history) saveHistory(data.history);
+    return true;
+  } catch (error) {
+    console.error("Error importing data:", error);
+    return false;
+  }
+}
