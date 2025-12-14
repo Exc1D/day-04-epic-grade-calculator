@@ -15,6 +15,12 @@ import {
 } from "./storage.js";
 import { getRankFromXP, getXPPercent, getLetterGrade } from "./rank.js";
 
+// XP Configuration
+const XP_config = {
+  per_passing_grade: 20,
+  max_per_project: 120,
+};
+
 // Audio setup
 const sounds = {
   xp: createAudio("assets/audio/xp.mp3", 0.4),
@@ -130,7 +136,7 @@ function handleCalculate() {
 
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   const passed = scores.filter((s) => s >= 60).length;
-  const gainedXP = passed * 20;
+  const gainedXP = XP_config.per_passing_grade;
 
   const oldRank = getRankFromXP(xp);
   xp += gainedXP;
