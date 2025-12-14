@@ -14,12 +14,11 @@ import {
   saveHistory,
 } from "./storage.js";
 import { getRankFromXP, getXPPercent, getLetterGrade } from "./rank.js";
-import { act } from "react";
 
 // XP Configuration
 const XP_CONFIG = {
-  per_passing_grade: 20,
-  max_per_project: 120,
+  perPassingGrade: 20,
+  maxPerProject: 120,
 };
 
 // ANIMATION_CONFIG
@@ -35,7 +34,7 @@ const ANIMATION_CONFIG = {
 };
 
 // Track active animations to prevent memory leaks
-const activeAnimations = [];
+const activeAnimations = new Map(); // Map to store active intervals
 
 // Audio setup
 const sounds = {
@@ -161,12 +160,12 @@ function handleCalculate() {
 
   if (scores.length === 0 && dom.results) {
     dom.results.innerHTML = `
-        <p class="info" style="color: #fbb24; text-align: center;">Please enter at least one score.</p>`;
+        <p class="info" style="color: #fbbf24; text-align: center;">Please enter at least one score.</p>`;
   }
 
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   const passed = scores.filter((s) => s >= 60).length;
-  const gainedXP = passed * XP_CONFIG.per_passing_grade;
+  const gainedXP = passed * XP_CONFIG.perPassingGrade;
 
   const oldRank = getRankFromXP(xp);
   xp += gainedXP;
@@ -327,11 +326,11 @@ function handleExport() {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `100day-backup-${data.todayString()}.json`;
+  a.download = `100day-backup-${todayString()}.json`;
   document.body.appendChild(a);
   a.click();
-  document.body.remiveChild(a);
-  URL.revokeObjectURL;
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 
   alert("Data exported successfully!");
 }
@@ -367,7 +366,7 @@ function handleImportFile(event) {
       alert("Data imported successfully! Refreshing page...");
       location.reload();
     } catch (error) {
-      alert(`Error importing data: ${error.message}`);
+      alert(`❌ Failed to import data: ${error.message}`);
     }
   };
   reader.readAsText(file);
