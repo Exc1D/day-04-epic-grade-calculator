@@ -14,6 +14,7 @@ import {
   saveHistory,
 } from "./storage.js";
 import { getRankFromXP, getXPPercent, getLetterGrade } from "./rank.js";
+import { act } from "react";
 
 // XP Configuration
 const XP_CONFIG = {
@@ -233,6 +234,34 @@ function animateRankUp() {
   dom.rankIcon.classList.add("rank-up");
   setTimeout(() => dom.rankIcon.classList.remove("rank-up"), 600);
 }
+
+function animateNumber(el, num) {
+  // Clear any existing animation
+  if (activeAnimation.has(el)) {
+    clearInterval(activeAnimation.get(el));
+    activeAnimation.delete(el);
+  }
+}
+
+// Get animation speed based on number size
+const config = ANIMATION_CONFIG.speeds.find((c) => num >= c.threshold);
+const speed = config ? config.speed : 50;
+
+let n = 0;
+
+if (num === 0) {
+  el.textContent = n;
+  return;
+}
+
+const interval = setInterval(() => {
+  n += 1;
+  if (n === num) {
+    clearInterval(interval);
+    activeAnimation.delete(el);
+  }
+  el.textContent = n;
+}, speed);
 
 function updateRankUI() {
   const rank = getRankFromXP(xp);
