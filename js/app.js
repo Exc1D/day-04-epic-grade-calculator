@@ -145,11 +145,9 @@ function handleCalculate() {
   const inputs = document.querySelectorAll(".score");
   const scores = getValidScores(inputs);
 
-  if (scores.length === 0) {
-    if (dom.results) {
-      dom.results.innerHTML = `
-      <p class="info" style="color: #fbb24; text-align: center;">Please enter at least one score.</p>`;
-    }
+  if (scores.length === 0 && dom.results) {
+    dom.results.innerHTML = `
+        <p class="info" style="color: #fbb24; text-align: center;">Please enter at least one score.</p>`;
   }
 
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
