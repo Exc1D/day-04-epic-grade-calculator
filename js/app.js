@@ -22,6 +22,19 @@ const XP_CONFIG = {
 };
 
 // ANIMATION_CONFIG
+const ANIMATION_CONFIG = {
+  speeds: [
+    { threshold: 200, speed: 1 },
+    { threshold: 100, speed: 10 },
+    { threshold: 75, speed: 20 },
+    { threshold: 50, speed: 25 },
+    { threshold: 25, speed: 35 },
+    { threshold: 0, speed: 50 },
+  ],
+};
+
+// Track active animations to prevent memory leaks
+const activeAnimations = [];
 
 // Audio setup
 const sounds = {
