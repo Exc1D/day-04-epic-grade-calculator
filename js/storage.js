@@ -45,7 +45,6 @@ export function getLastVisit() {
 export function setLastVisit(date) {
   localStorage.setItem(KEYS.lastVisit, date);
 }
-
 export function getCurrentProject() {
   return (stored = localStorage.getItem(keys.project) || "Untitled Project");
 }
@@ -54,47 +53,4 @@ export function setCurrentProject(name) {
   const trimmed = String(name || "").trim();
   const projectName = trimmed || "Untitled Project";
   localStorage.setItem(KEYS.project, projectName);
-}
-
-// History management
-export function getHistory() {
-  try {
-    const stored = localStorage.getItem(keys.history);
-    if (!stored) return [];
-
-    const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch (error) {
-    console.error("Error reading history:", error);
-    return [];
-  }
-}
-
-export function saveHistory(history) {
-  try {
-    const data = Array.isArray(history) ? history : [];
-    localStorage.setItem(keys.history, JSON.stringify(data));
-  } catch (error) {
-    console.error("Error saving history:", error);
-  }
-}
-
-// Utility: Clear all data (useful for testing)
-export function clearData() {
-  Object.values(keys).forEach((key) => {
-    localStorage.removeItem(key);
-  });
-}
-
-// Utility: Export data for backup
-export function exportData() {
-  return {
-    xp: getXP(),
-    week: getWeek(),
-    streak: getStreak(),
-    lastVisit: getLastVisit(),
-    project: getCurrentProject(),
-    history: getHistory(),
-    exportDate: new Date().toISOString(),
-  };
 }
