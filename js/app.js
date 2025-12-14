@@ -123,6 +123,20 @@ function attachEventListeners() {
   if (dom.calculateBtn) {
     dom.calculateBtn.addEventListener("click", handleCalculate);
   }
+
+  // Export/Import event listeners
+  const exportBtn = document.getElementById("exportBtn");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", handleExport);
+  }
+  const importBtn = document.getElementById("importBtn");
+  if (importBtn) {
+    importBtn.addEventListener("click", handleImport);
+  }
+  const importFile = document.getElementById("importFile");
+  if (importFile) {
+    importFile.addEventListener("change", handleImportFile);
+  }
 }
 
 function handleProjectSubmit(e) {
