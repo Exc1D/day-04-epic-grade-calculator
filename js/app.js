@@ -294,5 +294,70 @@ function updateRankUI() {
   }
 }
 
+// Export/Import functions
+function handleExport() {
+  const data = {
+    xp: getXP(),
+    week: getWeek(),
+    streak: getStreak(),
+    lastVisit: getLastVisit(),
+    project: getCurrentProject(),
+    history: getHistory(),
+    exportDate: new Date().toISOString(),
+    version: "1.0.0",
+  };
+
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `100day-backup-${data.todayString()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.remiveChild(a);
+  URL.revokeObjectURL;
+
+  alert("Data exported successfully!");
+}
+
+function handleImport() {
+  const fileInput = document.getElementById("importFile");
+  if (!fileInput) return;
+  fileInput.click();
+}
+
+function handleImportFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+
+      // Validate data structure
+      if (!data.version || data.xp === undefined) {
+        throw new Error("Invalid backup file format.");
+      }
+
+      // Import data
+      setXP(data.xp);
+      setWeek(data.week);
+      setStreak(data.streak);
+      setLastVisit(data.lastVisit);
+      setCurrentProject(data.project);
+      saveHistory(data.history);
+
+      alert("Data imported successfully! Refreshing page...");
+      location.reload();
+    } catch (error) {
+      alert(`Error importing data: ${error.message}`);
+    }
+  };
+  reader.readAsText(file);
+}
+
 // Start the app
 init();
