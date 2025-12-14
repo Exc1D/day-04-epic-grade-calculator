@@ -221,13 +221,13 @@ function showResults(avg, passed, rankedUp = false) {
     statusHTML = `
       <div class="rank-up-badge">
         <div class="rank-up-glow"></div>
-        <p class="rank-up-text">🎉 RANK UP! 🎉</p>
+        <p class="rank-up-text">RANK UP!</p>
         <p class="new-rank">${newRank.toUpperCase()}</p>
       </div>
     `;
   } else {
     statusHTML = `<p class="${passed ? "pass" : "fail"}">${
-      passed ? "PASS ✓" : "FAIL ✗"
+      passed ? "PASS ✓" : "ALMOST THERE !"
     }</p>`;
   }
 
