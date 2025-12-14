@@ -1,59 +1,100 @@
-// In-memory storage for Claude artifacts compatibility
-const storage = {
-  xp: 0,
-  week: 1,
-  streak: 0,
-  lastVisit: null,
-  project: "Untitled Project",
-  history: [],
+// Storage keys (prefixed to avoid conflicts)
+const keys = {
+  XP: "100day_XP",
+  week: "100day_week",
+  streak: "100day_streak",
+  lastVisit: "100day_lastVisit",
+  project: "100day_project",
+  history: "100day_history",
 };
 
 export function getXP() {
-  return Number(localStorage.getItem("100day_xp")) || 0;
+  const stored = localStorage.getItem(keys.XP);
+  return stored ? Math.max(0, Number(stored) || 0) : 0;
 }
 
 export function setXP(xp) {
   const normalized = Math.max(0, Number(xp) || 0);
-  localStorage.setItem("100day_xp", normalized);
+  localStorage.setItem(KEYS.XP, normalized);
 }
 
 export function getWeek() {
-  return storage.week;
+  const stored = localStorage.getItem(keys.week);
+  return stored ? Math.max(1, Number(stored) || 1) : 1;
 }
 
 export function setWeek(week) {
-  storage.week = Math.max(1, Number(week) || 1);
+  const normalized = Math.max(1, Number(week) || 1);
+  localStorage.setItem(KEYS.week, normalized);
 }
 
 export function getStreak() {
-  return storage.streak;
+  const stored = localStorage.getItem(keys.streak);
+  return stored ? Math.max(0, Number(stored) || 0) : 0;
 }
 
 export function setStreak(value) {
-  storage.streak = Math.max(0, Number(value) || 0);
+  const normalized = Math.max(1, Number(value) || 1);
+  localStorage.setItem(KEYS.streak, normalized);
 }
 
 export function getLastVisit() {
-  return storage.lastVisit;
+  return localStorage.getItem(keys.lastVisit) || null;
 }
 
 export function setLastVisit(date) {
-  storage.lastVisit = date;
+  localStorage.setItem(KEYS.lastVisit, date);
 }
 
 export function getCurrentProject() {
-  return storage.project || "Untitled Project";
+  return (stored = localStorage.getItem(keys.project) || "Untitled Project");
 }
 
 export function setCurrentProject(name) {
   const trimmed = String(name || "").trim();
-  storage.project = trimmed || "Untitled Project";
+  const projectName = trimmed || "Untitled Project";
+  localStorage.setItem(KEYS.project, projectName);
 }
 
+// History management
 export function getHistory() {
-  return Array.isArray(storage.history) ? storage.history : [];
+  try {
+    const stored = localStorage.getItem(keys.history);
+    if (!stored) return [];
+
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error("Error reading history:", error);
+    return [];
+  }
 }
 
 export function saveHistory(history) {
-  storage.history = Array.isArray(history) ? history : [];
+  try {
+    const data = Array.isArray(history) ? history : [];
+    localStorage.setItem(keys.history, JSON.stringify(data));
+  } catch (error) {
+    console.error("Error saving history:", error);
+  }
+}
+
+// Utility: Clear all data (useful for testing)
+export function clearData() {
+  Object.values(keys).forEach((key) => {
+    localStorage.removeItem(key);
+  });
+}
+
+// Utility: Export data for backup
+export function exportData() {
+  return {
+    xp: getXP(),
+    week: getWeek(),
+    streak: getStreak(),
+    lastVisit: getLastVisit(),
+    project: getCurrentProject(),
+    history: getHistory(),
+    exportDate: new Date().toISOString(),
+  };
 }
