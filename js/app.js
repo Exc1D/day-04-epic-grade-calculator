@@ -146,8 +146,10 @@ function handleCalculate() {
   const scores = getValidScores(inputs);
 
   if (scores.length === 0) {
-    showResults(0, false);
-    return;
+    if (dom.results) {
+      dom.results.innerHTML = `
+      <p class="info" style="color: #fbb24; text-align: center;">Please enter at least one score.</p>`;
+    }
   }
 
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
@@ -236,32 +238,35 @@ function animateRankUp() {
 }
 
 function animateNumber(el, num) {
-  // Clear any existing animation
-  if (activeAnimation.has(el)) {
-    clearInterval(activeAnimation.get(el));
-    activeAnimation.delete(el);
+  // Clear any existing animation for this element
+  if (activeAnimations.has(el)) {
+    clearInterval(activeAnimations.get(el));
+    activeAnimations.delete(el);
   }
-}
 
-// Get animation speed based on number size
-const config = ANIMATION_CONFIG.speeds.find((c) => num >= c.threshold);
-const speed = config ? config.speed : 50;
+  // Get animation speed based on number size
+  const config = ANIMATION_CONFIG.speeds.find((c) => num > c.threshold);
+  const speed = config ? config.speed : 50;
 
-let n = 0;
+  let n = 0;
 
-if (num === 0) {
-  el.textContent = n;
-  return;
-}
-
-const interval = setInterval(() => {
-  n += 1;
-  if (n === num) {
-    clearInterval(interval);
-    activeAnimation.delete(el);
+  if (num === 0) {
+    el.textContent = n; // Use textContent, not innerHTML
+    return;
   }
-  el.textContent = n;
-}, speed);
+
+  const interval = setInterval(() => {
+    n += 1;
+    if (n === num) {
+      clearInterval(interval);
+      activeAnimations.delete(el);
+    }
+    el.textContent = n; // Use textContent, not innerHTML
+  }, speed);
+
+  // Store the interval so we can cancel it if needed
+  activeAnimations.set(el, interval);
+}
 
 function updateRankUI() {
   const rank = getRankFromXP(xp);
