@@ -155,17 +155,34 @@ function handleGradesSubmit(e) {
 }
 
 function handleCalculate() {
-  const inputs = document.querySelectorAll(".score");
-  const scores = getValidScores(inputs);
+  console.log("[INFO] Calculate button clicked!");
 
-  if (scores.length === 0 && dom.results) {
-    dom.results.innerHTML = `
-        <p class="info" style="color: #fbbf24; text-align: center;">Please enter at least one score.</p>`;
+  const inputs = document.querySelectorAll(".score");
+  console.log("[INFO] Found inputs:", inputs.length);
+
+  const scores = getValidScores(inputs);
+  console.log("[INFO] Valid scores:", scores);
+
+  if (scores.length === 0) {
+    console.log("[ERROR] No valid scores entered!");
+    if (dom.results) {
+      dom.results.innerHTML = `
+        <p class="info" style="color: #fbbf24; text-align: center;">
+          Please enter at least one score to calculate
+        </p>
+      `;
+    }
+    return;
   }
 
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   const passed = scores.filter((s) => s >= 60).length;
   const gainedXP = passed * XP_CONFIG.perPassingGrade;
+
+  console.log("[SUCCESS] Average:", avg);
+  console.log("[SUCCESS] Passed count:", passed);
+  console.log("[SUCCESS] Gained XP:", gainedXP);
+  console.log("[SUCCESS] Is passing?:", avg >= 60);
 
   const oldRank = getRankFromXP(xp);
   xp += gainedXP;
@@ -174,8 +191,18 @@ function handleCalculate() {
   const newRank = getRankFromXP(xp);
   const rankedUp = oldRank !== newRank;
 
+  console.log("[SUCCESS] Old rank:", oldRank);
+  console.log("[SUCCESS] New rank:", newRank);
+  console.log("[SUCCESS] Ranked up?:", rankedUp);
+
   saveToHistory(avg, newRank);
   updateRankUI();
+
+  console.log("[SUCCESS] Calling showResults with:", {
+    avg,
+    passed: avg >= 60,
+    rankedUp,
+  });
   showResults(avg, avg >= 60, rankedUp);
 
   if (gainedXP > 0) {
@@ -187,8 +214,9 @@ function handleCalculate() {
     playSound(sounds.rankUp);
     animateRankUp();
   }
-}
 
+  console.log("[SUCCESS] Calculate completed!");
+}
 function getValidScores(inputs) {
   return [...inputs]
     .map((input) => {
@@ -213,7 +241,18 @@ function saveToHistory(avg, rank) {
 }
 
 function showResults(avg, passed, rankedUp = false) {
-  if (!dom.results) return;
+  if (!dom.results) {
+    console.error("[ERROR] Results element not found!");
+    return;
+  }
+
+  console.log("[INFO] showResults called with:", { avg, passed, rankedUp });
+
+  // Clear existing content first
+  dom.results.innerHTML = "";
+  dom.results.style.display = "block";
+  dom.results.style.visibility = "visible";
+  dom.results.style.opacity = "1";
 
   let statusHTML;
   if (rankedUp) {
@@ -221,20 +260,29 @@ function showResults(avg, passed, rankedUp = false) {
     statusHTML = `
       <div class="rank-up-badge">
         <div class="rank-up-glow"></div>
-        <p class="rank-up-text">RANK UP!</p>
+        <p class="rank-up-text">🎉 RANK UP! 🎉</p>
         <p class="new-rank">${newRank.toUpperCase()}</p>
       </div>
     `;
   } else {
-    statusHTML = `<p class="${passed ? "pass" : "fail"}">${
-      passed ? "PASS ✓" : "ALMOST THERE !"
-    }</p>`;
+    // Firefox-safe: Use emojis instead of Unicode symbols
+    const status = passed ? "✅ PASS" : "❌ FAIL";
+    const className = passed ? "pass" : "fail";
+
+    statusHTML = `<p class="${className}">${status}</p>`;
   }
 
-  dom.results.innerHTML = `
+  // Build the complete HTML
+  const resultHTML = `
     <p><strong>Average:</strong> ${avg.toFixed(1)}</p>
     ${statusHTML}
   `;
+
+  // Set content with a tiny delay for Firefox
+  requestAnimationFrame(() => {
+    dom.results.innerHTML = resultHTML;
+    console.log("[SUCCESS] Results HTML set successfully");
+  });
 }
 
 function clearInputs(inputs) {
