@@ -2,3 +2,41 @@
 @import "./layout.css";
 @import "./components.css";
 @import "./animations.css";
+
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+  #results {
+    display: block !important;
+  }
+
+  .pass,
+  .fail {
+    display: block !important;
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+    margin: 0.5rem 0 !important;
+    padding: 0.5rem !important;
+  }
+}
+
+/* Force visibility for both browsers */
+#results {
+  display: block;
+  min-height: 2rem;
+}
+
+.pass {
+  color: #22c55e;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.fail {
+  color: #ef4444;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: block;
+  margin: 0.5rem 0;
+}
